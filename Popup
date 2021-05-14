@@ -1,0 +1,49 @@
+local CreatePopups = Instance.new("ScreenGui")
+CreatePopups.Name = "Popups"
+CreatePopups.Parent = game.CoreGui
+local PopupTemplate = Instance.new("TextLabel")
+PopupTemplate.Name = "PopupTemplate"
+PopupTemplate.BackgroundTransparency = 1
+PopupTemplate.Size = UDim2.new(1, 0, 0.075, 0)
+PopupTemplate.Font = Enum.Font.Roboto
+PopupTemplate.TextColor3 = Color3.fromRGB(255, 255, 255)
+PopupTemplate.TextSize = 40
+PopupTemplate.TextStrokeTransparency = 0
+PopupTemplate.Parent = game.ReplicatedStorage
+local Popups = game.CoreGui:WaitForChild("Popups")
+
+local Popup = function(text)
+    local Popup = PopupTemplate:Clone()
+	Popup.Text = "< "..text.." >"
+	Popup.Parent = Popups
+end
+
+Popups.ChildAdded:Connect(function(v)
+	v.Name = #Popups:GetChildren()
+
+	if v.Name == "1" then
+		v.Position = UDim2.new(0, 0, 0, 0)
+	else
+		v.Position = UDim2.new(0, 0, (tonumber(v.Name)-1) * 0.035, 0)
+	end
+
+	delay(2.5, function()
+		for i = 1, 25 do
+			v.TextStrokeTransparency = 	v.TextStrokeTransparency + 1/25
+			v.TextTransparency = v.TextTransparency + 1/25
+			wait()
+		end
+		v:Destroy()
+	end)
+end)
+
+Popups.ChildRemoved:Connect(function(v)
+	for i,v in pairs(Popups:GetChildren()) do
+		v.Name = tonumber(v.Name-1)
+		if v.Name == "1" then
+			v.Position = UDim2.new(0, 0, 0, 0)
+		else
+			v.Position = UDim2.new(0, 0, (tonumber(v.Name)-1) * 0.035, 0)
+		end
+	end
+end)
